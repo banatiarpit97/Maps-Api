@@ -155,11 +155,11 @@ $(function(){
 
     // Get Route
     //
-    // var input = document.getElementById('input_box');
-    // var inputOptions = {
-    //     types:['(regions)']
-    // }
-    //
-    // var autocomplete = new google.maps.places.Autocomplete(input, inputOptions);
+    var input = document.getElementById('input_box');
+    var inputOptions = {
+        types:['(regions)']
+    }
+
+    var autocomplete = new google.maps.places.Autocomplete(input, inputOptions);
 
 });
