@@ -42,9 +42,7 @@ window.onload  = $(function(){
 
     map.addListener('click', function (event) {
         userLocation =  event.latLng;
-        console.log(event);
         if(userMarker){
-            console.log(userLocation)
             userMarker.setMap(null)
             userMarkerProperties = {
                 position : event.latLng,
@@ -175,13 +173,91 @@ window.onload  = $(function(){
         });
     }
 
+    //get current location using Geolocation
+     $('.getCurrentLocation').click(function () {
+         if (navigator.geolocation) {
+             navigator.geolocation.getCurrentPosition(showPosition);
+         }
+         else{
+             window.alert("Geolocation is not supported by this browser.")
+         }
+     })
+    function showPosition(position) {
+        userLat = position.coords.latitude;
+        userLng = position.coords.longitude;
+        userLocation = {lat : userLat, lng :userLng};
+        geocodeLatLng();
+        if(userMarker){
+            userMarker.setMap(null)
+            userMarkerProperties = {
+                position : {lat : userLat, lng :userLng} ,
+                map:map,
+                animation: google.maps.Animation.DROP,
+                draggable:true
+            }
+            userMarker = new google.maps.Marker(userMarkerProperties);
+            var userInfoWindow = new google.maps.InfoWindow({
+                content:"Your Current Location"
+            });
+            google.maps.event.addListener(userMarker, 'mouseover', function(){
+                userInfoWindow.open(map, userMarker);
+            })
+            google.maps.event.addListener(userMarker, 'mouseout', function(){
+                userInfoWindow.close();
+            })
+            getRoute();
+        }
+        else{
+            userMarkerProperties = {
+                position : {lat : userLat, lng :userLng},
+                animation: google.maps.Animation.DROP,
+                draggable:true
+            }
+
+            userMarker = new google.maps.Marker(userMarkerProperties);
+            userMarker.setMap(map);
+            var userInfoWindow = new google.maps.InfoWindow({
+                content:"Your Current Location"
+            });
+            google.maps.event.addListener(userMarker, 'mouseover', function(){
+                userInfoWindow.open(map, userMarker);
+            })
+            google.maps.event.addListener(userMarker, 'mouseout', function(){
+                userInfoWindow.close();
+            })
+            getRoute();
+
+        }
+
+        //geolocation errors
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    window.alert("User denied the request for Geolocation.")
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    window.alert("Location information is unavailable.")
+                    break;
+                case error.TIMEOUT:
+                    window.alert("The request to get user location timed out.")
+                    break;
+                case error.UNKNOWN_ERROR:
+                    window.alert("An unknown error occurred.")
+                    break;
+            }
+        }
+    }
+
+
+
+
+
     // Get Route
     //
     var input = document.getElementById('input_box');
     var inputOptions = {
         types:['(regions)']
     }
-
     var autocomplete = new google.maps.places.Autocomplete(input, inputOptions);
 
 });

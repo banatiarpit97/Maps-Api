@@ -42,3 +42,20 @@ md-content{
     text-align: center;
     clear: both;
 }
+.getCurrentLocation{
+    clear: both;
+    position: absolute;
+    top: 19%;
+    left:10%;
+    width:180px;
+    cursor: pointer;
+}
+.getCurrentLocationIcon{
+    float: left;
+    margin-right: 4%;
+    margin-top: 1%;
+}
+.getCurrentLocationText{
+    float: left;
+    color: darkblue;
+}
