@@ -1,4 +1,4 @@
-$(function(){
+window.onload  = $(function(){
 
     var userMarker;
     var userLocation;
