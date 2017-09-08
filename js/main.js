@@ -2,6 +2,9 @@ window.onload  = $(function(){
 
     var userMarker;
     var userLocation;
+    var formattedAddress;
+    var userLat;
+    var userLng;
     var destination = {lat :28.661847, lng :77.089045};
     var mapProperties = {
         center:destination,
@@ -82,6 +85,10 @@ window.onload  = $(function(){
             getRoute();
 
         }
+
+        userLat = userMarker.getPosition().lat();
+        userLng = userMarker.getPosition().lng();
+        geocodeLatLng();
     })
 
     // Get Route
@@ -123,7 +130,7 @@ window.onload  = $(function(){
         $.getJSON(url, function(data) {
              if(data.status == 'OK'){
                  userLocation = data.results[0].geometry.location;
-                 var formattedAddress = data.results[0].formatted_address;
+                 formattedAddress = data.results[0].formatted_address;
                  $.each(data.results[0].address_components, function(index, element){
                      if(element.types[0] == "postal_code"){
                          postcode = element.long_name;
@@ -150,8 +157,23 @@ window.onload  = $(function(){
         //         getRoute();
         //     }
         // })
-    })
+    });
 
+    //for reverse geocoding i.e. convert latitude and longitude to address
+    function geocodeLatLng() {
+        var latlng = {lat: userLat, lng: userLng};
+        geocoder.geocode({'location': latlng}, function (results, status) {
+            if (status === 'OK') {
+                if (results[0]) {
+                    formattedAddress = results[0].formatted_address;
+                    formattedAddressPrint = formattedAddress.split(', India')
+                    $(".your_address").removeClass('hidden');
+                    $(".your_address2").html(formattedAddressPrint);
+
+                }
+            }
+        });
+    }
 
     // Get Route
     //
