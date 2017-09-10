@@ -26,6 +26,8 @@ md-content{
     float: right;
     font-size: 1.1em;
     margin-top: 2.2%;
+    width: 500px;
+    overflow-x: auto;
 }
 .our_address1, .your_address1{
     font-weight: bold;
